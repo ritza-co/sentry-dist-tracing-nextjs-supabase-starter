@@ -43,7 +43,7 @@ From the left-hand navigation, open the **Table Editor** page and click **+ New 
 
 Click **Add foreign key relation** at the bottom of the form. Select the **users** table in the Supabase **Auth** schema to reference to. Create a one-to-one relationship between `notes.user_id` and `auth.users.id`. Click **Save**:
 
-![Create foreign key](./app/assets/images/supbase-create-foreign-key.png)
+![Create foreign key](./app/assets/images/supabase-create-foreign-key.png)
 
 You'll see an empty table:
 
@@ -119,7 +119,7 @@ In the Next.js note-taking app, create a `.env` file in the root of the project 
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
 
 Open [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api) and add the project URL and the `anon` and `public` API key values to the `.env` file.
