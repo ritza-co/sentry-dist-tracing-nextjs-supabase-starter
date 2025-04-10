@@ -1,17 +1,17 @@
-# Note taking app
+# Note-Taking App
 
 A basic Next.js application for creating notes. Built with TypeScript and Supabase.
 
 ## Features
 
-- User authentication (sign up, sign in)
+- User authentication (sign up and sign in)
 - Notes creation
 - Supabase PostgreSQL database
-- Light mode and dark mode
+- Light and dark modes
 - Styling with [Tailwind CSS](https://tailwindcss.com)
 - Components with [shadcn/ui](https://ui.shadcn.com/)
 
-## Installing the dependencies
+## Install Dependencies
 
 Install the dependencies using the following command:
 
@@ -19,9 +19,9 @@ Install the dependencies using the following command:
 npm install
 ```
 
-## Setting up a Supabase database
+## Set Up a Supabase Database
 
-[Sign up to Supabase](https://supabase.com/dashboard/sign-up), if you don't already have an account. Create an organization:
+[Sign up to Supabase](https://supabase.com/dashboard/sign-up) if you don't already have an account. Create an organization:
 
 ![Create Supabase org](./app/assets/images/supabase-create-org.png)
 
@@ -30,8 +30,7 @@ Create a new project:
 ![Create Supabase project](./app/assets/images/supabase-create-project.png)
 
 
-
-Open the **Table Editor** page from the navigation on the left and click the "+ New Table" button. Create a table called `notes` with the following columns:
+From the left-hand navigation, open the **Table Editor** page and click **+ New Table**. Create a table called "notes" with the following columns:
 
 | Name    | Type | Default Value | Primary | Is Identity |
 | ------- | ---- | ------------- | ------- | ----------- |
@@ -42,15 +41,15 @@ Open the **Table Editor** page from the navigation on the left and click the "+ 
 
 ![Create notes table](./app/assets/images/supabase-create-table.png)
 
-Click the "Add foreign key relation" button at the bottom of the form. Select the **users** table in the Supabase **Auth** schema to reference to. Create a one-to-one relationship between `notes.user_id` and `auth.users.id` and then click the "Save" button:
+Click **Add foreign key relation** at the bottom of the form. Select the **users** table in the Supabase **Auth** schema to reference to. Create a one-to-one relationship between `notes.user_id` and `auth.users.id`. Click **Save**:
 
-![Create foreign key](./app/assets/images/supbase-create-foreign-key.png)
+![Create foreign key](./app/assets/images/supabase-create-foreign-key.png)
 
 You'll see an empty table:
 
 ![Empty notes table](./app/assets/images/supabase-empty-table.png)
 
-Open the **SQL Editor** page from the navigation menu on the left and add the following SQL queries to the editor:
+From the left-hand navigation menu, open the **SQL Editor** page and add the following SQL queries to the editor:
 
 ```sql
 -- Create policy for SELECT operations
@@ -86,7 +85,9 @@ TO authenticated
 USING ((select auth.uid()) = user_id);
 ```
 
-Click the "Run" button at the bottom-right of the page. You should see "Success. No rows returned" printed to the **Results** tab. This creates [policies](https://supabase.com/docs/guides/database/postgres/row-level-security#creating-policies) for the notes table that restrict CRUD actions on notes to the owner of the notes. This is possible because we enabled [row level security](https://supabase.com/docs/guides/database/postgres/row-level-security), which is recommended, when creating the table. 
+This query creates [policies](https://supabase.com/docs/guides/database/postgres/row-level-security#creating-policies) for the notes table that restrict CRUD actions on notes to the note's owner. This works because [Row Level Security](https://supabase.com/docs/guides/database/postgres/row-level-security) was enabled when the table was created, which is recommended. 
+
+Click the **Run** button at the lower right of the page to run the query. You should see "Success. No rows returned" printed to the **Results** tab. 
 
 Now add the following SQL query to the editor:
 
@@ -108,20 +109,22 @@ END;
 $$ LANGUAGE plpgsql;
 ```
 
-Click the "Run" button at the bottom-right of the page. You should see "Success. No rows returned" printed to the **Results** tab. This creates a [Postgres function](https://supabase.com/docs/guides/database/functions) called `slow_get_notes` that fetches the user's notes. There's a 120 second delay added to the query using the Postgres `pg_sleep` function. 
- 
- ## Connecting your Supabase project to the Next.js notes app
+This query creates a [Postgres function](https://supabase.com/docs/guides/database/functions) called `slow_get_notes` that fetches the user's notes. A 120-second delay is added to the query using the Postgres `pg_sleep` function. 
 
-In the Next.js notes app, create a `.env` file in the root of the project and add the following variables to it:
+Click the **Run** button at the lower right of the page to run the query. You should see "Success. No rows returned" printed to the **Results** tab. 
+ 
+ ## Connecting Your Supabase Project to the Next.js Note-Taking App
+
+In the Next.js note-taking app, create a `.env` file in the root of the project and add the following variables to it:
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
 
-Open [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api) and add the project URL and `anon``public` API key values to the .env file.
+Open [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api) and add the project URL and the `anon` and `public` API key values to the `.env` file.
 
-## Creating example notes
+## Creating Example Notes
 
 Run the local development server:
 
@@ -129,11 +132,11 @@ Run the local development server:
 npm run dev
 ```
 
-You'll see the notes app home page:
+You'll see the note-taking app home page:
 
 ![Notes app](./app/assets/images/notes-app.png)
 
-Sign up, verify your email address, and then login to see the notes page:
+Sign up, verify your email address, then log in to see the notes page:
 
 ![Notes app - logged in](./app/assets/images/notes-app-logged-in.png)
 
@@ -141,9 +144,9 @@ Create some example notes:
 
 ![Notes app - with notes](./app/assets/images/notes-app-with-notes.png)
 
-## Updating the `getNotes` server action to use the Postgres function 
+## Updating the `getNotes` Server Action to Use the Postgres Function 
 
-Replace the `getNotes` server action in the `/app/actions.ts` file with the following `getNotes` function:
+In the `/app/actions.ts` file, replace the `getNotes` Server Action with the following `getNotes` function:
  
 ```ts
 export async function getNotes() {
@@ -184,10 +187,14 @@ export async function getNotes() {
 }
 ```
 
-This changes the `getNotes` server action to use the `slow_get_notes` Postgres function, which we created, to fetch the user's notes. It uses a remote procedure call (rpc) to call the function. 
+This update changes the `getNotes` Server Action to use the `slow_get_notes` Postgres function we created, calling it with a remote procedure call (RPC) to fetch the user's notes. 
 
-## Deploying with Vercel
+## Deploy With Vercel
 
-[Sign up to Vercel](https://vercel.com/signup) using your GitHub account, if you haven't already. Save this notes project in a GitHub repo, then click the ["New Project"](https://vercel.com/new) button at the top right of your dashboard. You'll be presented with a list of Git repositories that the Git account you've signed up with has write access to. Import the notes project, a page will be displayed where you can configure your project before it's deployed.
+If you haven't already, [sign up to Vercel](https://vercel.com/signup) using your GitHub account. Save this note-taking project in a GitHub repo, then click [**New Project**](https://vercel.com/new) at the top right of your dashboard. You'll be presented with a list of Git repositories that the Git account you signed up with has write access to. Import the notes project, and a page will be displayed where you can configure your project before it's deployed:
 
-Select Next.js as the [**Framework Preset**](https://vercel.com/docs/deployments/configure-a-build#framework-preset). Keep the **Root Directory** as `./`. Add the `.env` variables to the [**Environment Variables**](https://vercel.com/docs/environment-variables) and then click the "Deploy" button to deploy the app.
+- Select Next.js as the [**Framework Preset**](https://vercel.com/docs/deployments/configure-a-build#framework-preset).
+- Keep the **Root Directory** as `./`.
+- Add the `.env` variables to [**Environment Variables**](https://vercel.com/docs/environment-variables). 
+- Click **Deploy**.
+
